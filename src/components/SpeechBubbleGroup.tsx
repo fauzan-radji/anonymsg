@@ -1,4 +1,4 @@
-import { Message } from "@/types";
+import type { Message } from "@/types";
 import SpeechBubble from "./SpeechBubble";
 
 interface Props {
@@ -8,17 +8,20 @@ interface Props {
 
 export default function SpeechBubbleGroup({ messages, fromMe = false }: Props) {
   return fromMe ? (
-    <div className="flex flex-col gap-1 items-end max-w-[calc(100%_-_2rem)] md:max-w-prose ms-auto">
-      {messages.map(({ id, text }) => (
-        <SpeechBubble fromMe key={id}>
-          {text}
-        </SpeechBubble>
+    <div className="ms-auto flex max-w-[calc(100%_-_4rem)] flex-col items-end gap-1 md:max-w-prose">
+      {messages.map((message, index) => (
+        <SpeechBubble
+          message={message}
+          fromMe
+          key={message.id}
+          first={index === 0}
+        />
       ))}
     </div>
   ) : (
-    <div className="flex flex-col gap-1 flex-1 md:max-w-prose">
-      {messages.map(({ id, text }) => (
-        <SpeechBubble key={id}>{text}</SpeechBubble>
+    <div className="flex max-w-[calc(100%_-_4rem)] flex-col gap-1 md:max-w-prose">
+      {messages.map((message, index) => (
+        <SpeechBubble message={message} key={message.id} first={index === 0} />
       ))}
     </div>
   );

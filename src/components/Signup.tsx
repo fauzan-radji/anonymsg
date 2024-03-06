@@ -1,6 +1,7 @@
 import { FormEvent, FormEventHandler, useRef } from "react";
 
 import InputForm from "./InputForm";
+import strings from "@/values/strings";
 
 interface Props {
   setUsername: (username: string) => void;
@@ -9,19 +10,25 @@ interface Props {
 export default function Signup({ setUsername }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (
-    e: FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async () => {
     if (!(inputRef.current && inputRef.current.value)) return;
 
     setUsername(inputRef.current.value);
   };
 
+  const validateUsername = (username: string) =>
+    /^[a-zA-Z0-9_.]+$/.test(username);
+
   return (
-    <section className="px-4 flex items-center justify-center flex-1 flex-col gap-4">
-      <h2 className="font-bold text-xl">Daftar</h2>
-      <InputForm onSubmit={handleSubmit} ref={inputRef} actionButton="💾" />
+    <section className="flex flex-1 flex-col items-center justify-center gap-2 px-4">
+      <h2 className="text-xl font-bold">{strings.signup}</h2>
+      <InputForm
+        validate={validateUsername}
+        onSubmit={handleSubmit}
+        ref={inputRef}
+        actionButton="💾"
+      />
+      <p className="text-center text-xs">{strings.username_can_only_contain}</p>
     </section>
   );
 }
