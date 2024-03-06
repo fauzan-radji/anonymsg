@@ -82,7 +82,7 @@ Feel free to share your thoughts, opinions, and feelings with others without the
 3. Get your API key from [Multiavatar][multiavatar-url] and add it to your `.env.local` file
 
    ```env
-   NEXT_PUBLIC_MULTIAVATAR_API_KEY=your_api_key
+   MULTIAVATAR_API_KEY=your_api_key
    ```
 
 4. Install the dependencies

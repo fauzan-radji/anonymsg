@@ -1,33 +1,28 @@
-import Image from "next/image";
+import Avatar from "./Avatar";
 import { MessageGroup } from "@/types";
 import SpeechBubbleGroup from "./SpeechBubbleGroup";
 
-const API_KEY = process.env.NEXT_PUBLIC_MULTIAVATAR_API_KEY;
-const loader = ({ src }: { src: string }) => {
-  return `https://api.multiavatar.com/${src}.png?apikey=${API_KEY}`;
-};
+interface Props {
+  message: MessageGroup;
+  fromMe?: boolean;
+}
 
-export default function SpeechBubbleRow({
-  messages,
-}: {
-  messages: MessageGroup[];
-}) {
-  return messages.map((message) =>
-    message.author === "Jane Doe" ? ( // FIXME
-      <SpeechBubbleGroup key={message.id} messages={message.messages} fromMe />
-    ) : (
-      <div key={message.id} className="flex gap-2 items-start">
-        <Image
-          className="w-6 aspect-square bg-slate-300 rounded-full"
-          loader={loader}
-          src={message.author}
-          alt={message.author}
-          width={24}
-          height={24}
-        />
+export default function SpeechBubbleRow({ message, fromMe = false }: Props) {
+  return (
+    <div key={message.id} className="flex gap-2 items-start">
+      {fromMe ? (
+        <>
+          <SpeechBubbleGroup messages={message.messages} fromMe />
 
-        <SpeechBubbleGroup messages={message.messages} />
-      </div>
-    )
+          <Avatar username={message.author} />
+        </>
+      ) : (
+        <>
+          <Avatar username={message.author} />
+
+          <SpeechBubbleGroup messages={message.messages} />
+        </>
+      )}
+    </div>
   );
 }
