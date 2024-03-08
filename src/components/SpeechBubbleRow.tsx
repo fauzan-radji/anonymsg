@@ -9,16 +9,16 @@ interface Props {
 
 export default function SpeechBubbleRow({ message, fromMe = false }: Props) {
   return (
-    <div key={message.id} className="flex gap-2 items-start">
+    <div key={message.id} className="flex items-start gap-2">
       {fromMe ? (
         <>
           <SpeechBubbleGroup messages={message.messages} fromMe />
 
-          <Avatar username={message.author} />
+          <Avatar username={message.author} size="small" />
         </>
       ) : (
         <>
-          <Avatar username={message.author} />
+          <Avatar username={message.author} size="small" />
 
           <SpeechBubbleGroup messages={message.messages} />
         </>

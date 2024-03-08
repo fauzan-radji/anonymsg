@@ -1,4 +1,4 @@
-import { FormEvent, FormEventHandler, useRef } from "react";
+import { FormEventHandler, useRef } from "react";
 
 import InputForm from "./InputForm";
 import strings from "@/values/strings";
@@ -16,12 +16,11 @@ export default function Signup({ setUsername }: Props) {
     setUsername(inputRef.current.value);
   };
 
-  const validateUsername = (username: string) =>
-    /^[a-zA-Z0-9_.]+$/.test(username);
+  const validateUsername = (username: string) => /^[a-z0-9_.]+$/.test(username);
 
   return (
     <section className="flex flex-1 flex-col items-center justify-center gap-2 px-4">
-      <h2 className="text-xl font-bold">{strings.signup}</h2>
+      <h2 className="text-xl font-bold">{strings.pick_a_username}</h2>
       <InputForm
         validate={validateUsername}
         onSubmit={handleSubmit}

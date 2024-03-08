@@ -2,13 +2,13 @@ import "./globals.css";
 
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
+import strings from "@/values/strings";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Anonymsg",
-  description:
-    "An anonymous messaging platform for you to share your opinions freely without fear of other people's judgment.",
+  title: strings.app_name,
+  description: strings.description,
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang={strings.lang}>
       <body className={inter.className}>{children}</body>
     </html>
   );
