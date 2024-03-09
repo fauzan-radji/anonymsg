@@ -1,67 +1,39 @@
 import {
-  DocumentData,
-  DocumentReference,
-  Query,
-  QueryDocumentSnapshot,
-  SnapshotOptions,
+  type DocumentData,
   addDoc,
-  collection,
-  getFirestore,
   limit,
   orderBy,
   query,
-  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
+import { Message, Room } from "@/types";
+import { messagesRef, roomRef, roomsRef } from "./references";
 
-import { Message } from "@/types";
-import { initializeApp } from "firebase/app";
-
-const app = initializeApp({
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-});
-
-const converter = {
-  toFirestore: (data: Message): DocumentData => {
-    return {
-      author: data.author,
-      text: data.text,
-      createdAt: serverTimestamp(),
-    };
+export function getMessagesQuery(
+  roomId: string,
+  options: {
+    limit: number;
   },
-  fromFirestore: (
-    snap: QueryDocumentSnapshot,
-    options: SnapshotOptions
-  ): Message => {
-    const data = snap.data(options);
-    return {
-      id: snap.id,
-      author: data.author,
-      text: data.text,
-    };
-  },
-};
-
-const firestore = getFirestore(app);
-const messagesRef = collection(firestore, "messages").withConverter(converter);
-
-export function getMessagesQuery(options: {
-  limit: number;
-}): Query<Message, DocumentData> {
+) {
   return query<Message, DocumentData>(
-    messagesRef,
+    messagesRef(roomId),
     orderBy("createdAt"),
-    limit(options.limit)
+    limit(options.limit),
   );
 }
 
-export function createMessage(
-  data: Omit<Message, "id">
-): Promise<DocumentReference<Omit<Message, "id">, DocumentData>> {
-  return addDoc(messagesRef, data);
+export function getRoomsQuery(options: { limit: number }) {
+  return query<Room, DocumentData>(
+    roomsRef,
+    orderBy("updatedAt"),
+    limit(options.limit),
+  );
+}
+
+export function createMessage(roomId: string, data: Omit<Message, "id">) {
+  return addDoc(messagesRef(roomId), data);
+}
+
+export function updateLastMessage(roomId: string, lastMessage: string) {
+  return updateDoc(roomRef(roomId), { lastMessage });
 }

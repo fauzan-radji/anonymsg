@@ -1,12 +1,28 @@
 "use client";
 
-import { Avatar, Room, Signup } from "@/components";
+import { Avatar, Room } from "@/components";
 
+import { getRoomsQuery } from "@/lib/firebase";
+import { redirect } from "next/navigation";
 import strings from "@/values/strings";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useEffect } from "react";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function Home() {
-  const [username, setUsername] = useLocalStorage("username", "");
+  const [username, setUsername, isFirstTimeLoad] = useLocalStorage(
+    "username",
+    "",
+  );
+
+  useEffect(() => {
+    if (isFirstTimeLoad) return;
+    if (username.length === 0) {
+      redirect("/signup");
+    }
+  }, [username, isFirstTimeLoad]);
+
+  const [rooms] = useCollectionData(getRoomsQuery({ limit: 10 }));
 
   return (
     <main className="flex h-svh flex-col bg-slate-200 text-slate-900">
@@ -27,19 +43,21 @@ export default function Home() {
         </div>
       </header>
 
-      {username.length > 0 ? (
-        <section className="flex flex-1 flex-col overflow-x-hidden overflow-y-scroll">
-          {Array.from({ length: 10 }).map((_, i) => (
+      <section className="flex flex-1 flex-col overflow-x-hidden overflow-y-scroll">
+        {rooms?.map((room) => {
+          const [author, ...rest] = room.lastMessage.split(": ");
+          const text = rest.join(": ");
+          const lastMessage = `${author === username ? strings.you : author}: ${text}`;
+          return (
             <Room
-              key={i}
-              name={`room-${i + 1}`}
-              preview="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla reprehenderit illum voluptates necessitatibus vel debitis ex inventore enim?"
+              key={room.id}
+              id={room.id}
+              name={room.name}
+              preview={lastMessage}
             />
-          ))}
-        </section>
-      ) : (
-        <Signup setUsername={setUsername} />
-      )}
+          );
+        })}
+      </section>
     </main>
   );
 }

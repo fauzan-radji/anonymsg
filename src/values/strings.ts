@@ -9,6 +9,7 @@ const strings = {
   username_can_only_contain:
     "Username hanya boleh mengandung huruf kecil, angka, titik, dan garis bawah.",
   back: "Kembali",
+  you: "Anda",
 };
 
 export type Strings = typeof strings;
@@ -24,6 +25,7 @@ export const id: Strings = {
   username_can_only_contain:
     "Username hanya boleh mengandung huruf kecil, angka, titik, dan garis bawah.",
   back: "Kembali",
+  you: "Anda",
 };
 
 export const en: Strings = {
@@ -37,6 +39,7 @@ export const en: Strings = {
   username_can_only_contain:
     "Username can only contain lowercase letters, numbers, periods, and underscores.",
   back: "Back",
+  you: "You",
 };
 
 export default strings;
