@@ -33,7 +33,10 @@ Feel free to share your thoughts, opinions, and feelings with others without the
 
 ## Features
 
-- [ ] Send and receive anonymous messages
+- [x] Send and receive anonymous messages
+- [ ] Edit message
+- [ ] Delete message
+- [ ] Reply to messages
 - [ ] React to messages
 - [ ] Upvote and downvote messages
 - [ ] Report messages
@@ -106,13 +109,23 @@ Feel free to share your thoughts, opinions, and feelings with others without the
 
 6. Create a Firestore database and add the following collections:
 
-   - **messages**
+   - **rooms**
 
-     | Field     | Type      |
-     | --------- | --------- |
-     | author    | string    |
-     | text      | string    |
-     | createdAt | timestamp |
+     | Field       | Type      |
+     | ----------- | --------- |
+     | name        | string    |
+     | description | string    |
+     | lastMessage | string    |
+     | createdAt   | timestamp |
+     | updatedAt   | timestamp |
+
+     - **messages** (subcollections)
+
+       | Field     | Type      |
+       | --------- | --------- |
+       | author    | string    |
+       | text      | string    |
+       | createdAt | timestamp |
 
 7. Add the following rules to your Firestore database:
 
@@ -128,7 +141,7 @@ Feel free to share your thoughts, opinions, and feelings with others without the
    }
    ```
 
-8. Adjust the `firebase.rc` file to your project
+8. Adjust the `.firebaserc` file to your project
 
    ```json
    {

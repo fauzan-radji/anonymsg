@@ -2,27 +2,19 @@
 
 import { Avatar, Room } from "@/components";
 
-import { getRoomsQuery } from "@/lib/firebase";
 import { redirect } from "next/navigation";
+import routes from "@/values/routes";
 import strings from "@/values/strings";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useEffect } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useHomeViewModel from "@/viewmodels/useHomeViewModel";
 
 export default function Home() {
-  const [username, setUsername, isFirstTimeLoad] = useLocalStorage(
-    "username",
-    "",
-  );
+  const { username, setUsername, isUsernameLoading, rooms } = useHomeViewModel();
 
   useEffect(() => {
-    if (isFirstTimeLoad) return;
-    if (username.length === 0) {
-      redirect("/signup");
-    }
-  }, [username, isFirstTimeLoad]);
-
-  const [rooms] = useCollectionData(getRoomsQuery({ limit: 10 }));
+    if (isUsernameLoading) return;
+    if (username.length === 0) redirect(routes.signup);
+  }, [username, isUsernameLoading]);
 
   return (
     <main className="flex h-svh flex-col bg-slate-200 text-slate-900">

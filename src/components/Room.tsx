@@ -1,5 +1,6 @@
 import Avatar from "./Avatar";
 import Link from "next/link";
+import routes from "@/values/routes";
 
 interface Props {
   id: string;
@@ -10,7 +11,7 @@ interface Props {
 export default function Room({ id, name, preview }: Props) {
   return (
     <Link
-      href={`/room/${id}`}
+      href={routes.room(id)}
       className="flex items-center gap-2 px-4 py-2 hover:bg-slate-300"
     >
       <Avatar username={id} size="large" className="flex-shrink-0" />

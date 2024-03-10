@@ -3,22 +3,18 @@
 import { Avatar, Signup as SignupComponent } from "@/components";
 
 import { redirect } from "next/navigation";
+import routes from "@/values/routes";
 import strings from "@/values/strings";
 import { useEffect } from "react";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useSignupViewModel from "@/viewmodels/useSignupViewModel";
 
 export default function Signup() {
-  const [username, setUsername, isFirstTimeLoad] = useLocalStorage(
-    "username",
-    "",
-  );
+  const { username, setUsername, isUsernameLoading } = useSignupViewModel();
 
   useEffect(() => {
-    if (isFirstTimeLoad) return;
-    if (username.length > 0) {
-      redirect("/");
-    }
-  }, [username, isFirstTimeLoad]);
+    if (isUsernameLoading) return;
+    if (username.length > 0) redirect(routes.home);
+  }, [username, isUsernameLoading]);
 
   return (
     <main className="flex h-svh flex-col bg-slate-200 text-slate-900">
