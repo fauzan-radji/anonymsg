@@ -1,16 +1,19 @@
 import { createMessage, getMessagesQuery } from "@/lib/firebase";
-import { useMemo, useRef } from "react";
+import {
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
 
 import type { MessageGroup } from "@/types";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { roomRef } from "@/lib/references";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useMemo } from "react";
 import { useParams } from "next/navigation";
 
 export default function useRoomViewModel() {
-  const dummyRef = useRef<HTMLSpanElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
   const [username, _, isUsernameLoading] = useLocalStorage("username", "");
   const roomId = useParams().roomId as string;
+  const [room] = useDocumentData(roomRef(roomId));
   const [messages] = useCollectionData(getMessagesQuery(roomId, { limit: 25 }));
   const messageGroups: MessageGroup[] = useMemo(() => {
     if (!messages) return [];
@@ -32,23 +35,18 @@ export default function useRoomViewModel() {
     return messageGroups;
   }, [messages]);
 
-  const handleSubmit = () => {
-    if (!(inputRef.current && inputRef.current.value)) return;
-    const author = username;
-    const text = inputRef.current.value;
-    inputRef.current.value = "";
-
-    createMessage(roomId, { author, text });
-  };
+  function postMessage(message: string) {
+    if (!message) return;
+    createMessage(roomId, { author: username, text: message });
+  }
 
   return {
-    dummyRef,
-    inputRef,
     username,
     isUsernameLoading,
+    room,
     roomId,
     messages,
     messageGroups,
-    handleSubmit,
+    postMessage,
   };
 }
