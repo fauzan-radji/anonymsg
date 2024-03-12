@@ -1,13 +1,14 @@
+import type { Message, MessageGroup } from "@/types";
 import { createMessage, getMessagesQuery } from "@/lib/firebase";
 import {
   useCollectionData,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
+import { useMemo, useState } from "react";
 
-import type { MessageGroup } from "@/types";
+import { omit } from "@/utils";
 import { roomRef } from "@/lib/references";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { useMemo } from "react";
 import { useParams } from "next/navigation";
 
 export default function useRoomViewModel() {
@@ -34,10 +35,18 @@ export default function useRoomViewModel() {
 
     return messageGroups;
   }, [messages]);
+  const [repliedMessage, setRepliedMessage] = useState<Message>();
 
   function postMessage(message: string) {
     if (!message) return;
-    createMessage(roomId, { author: username, text: message });
+
+    const replied = repliedMessage ? omit(repliedMessage, ["replied"]) : null;
+
+    createMessage(roomId, {
+      author: username,
+      text: message,
+      replied,
+    });
   }
 
   return {
@@ -48,5 +57,7 @@ export default function useRoomViewModel() {
     messages,
     messageGroups,
     postMessage,
+    repliedMessage,
+    setRepliedMessage,
   };
 }

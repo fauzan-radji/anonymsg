@@ -13,6 +13,7 @@ export const messageConverter = {
       author: data.author,
       text: data.text,
       createdAt: serverTimestamp(),
+      replied: data.replied,
     };
   },
   fromFirestore: (
@@ -24,6 +25,7 @@ export const messageConverter = {
       id: snap.id,
       author: data.author,
       text: data.text,
+      replied: data.replied,
     };
   },
 };

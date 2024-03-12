@@ -1,18 +1,28 @@
+import type { Message, MessageGroup } from "@/types";
+
 import Avatar from "./Avatar";
-import { MessageGroup } from "@/types";
 import SpeechBubbleGroup from "./SpeechBubbleGroup";
 
 interface Props {
   message: MessageGroup;
   fromMe?: boolean;
+  onReply: (message: Message) => void;
 }
 
-export default function SpeechBubbleRow({ message, fromMe = false }: Props) {
+export default function SpeechBubbleRow({
+  message,
+  fromMe = false,
+  onReply,
+}: Props) {
   return (
     <div key={message.id} className="flex items-start gap-2">
       {fromMe ? (
         <>
-          <SpeechBubbleGroup messages={message.messages} fromMe />
+          <SpeechBubbleGroup
+            messages={message.messages}
+            fromMe
+            onReply={onReply}
+          />
 
           <Avatar username={message.author} size="small" />
         </>
@@ -20,7 +30,7 @@ export default function SpeechBubbleRow({ message, fromMe = false }: Props) {
         <>
           <Avatar username={message.author} size="small" />
 
-          <SpeechBubbleGroup messages={message.messages} />
+          <SpeechBubbleGroup messages={message.messages} onReply={onReply} />
         </>
       )}
     </div>

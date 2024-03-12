@@ -21,6 +21,8 @@ export default function Room() {
     messages,
     messageGroups,
     postMessage,
+    repliedMessage,
+    setRepliedMessage,
   } = useRoomViewModel();
 
   const dummyRef = useRef<HTMLSpanElement>(null);
@@ -47,7 +49,8 @@ export default function Room() {
     if (!(inputRef.current && inputRef.current.value)) return;
     postMessage(inputRef.current.value);
     inputRef.current.value = "";
-  }, [postMessage]);
+    setRepliedMessage(undefined);
+  }, [postMessage, setRepliedMessage]);
 
   return (
     <main className="flex h-svh flex-col bg-slate-200 text-slate-900">
@@ -69,18 +72,33 @@ export default function Room() {
 
       <section className="flex-1 overflow-x-hidden overflow-y-scroll p-4">
         <div className="container mx-auto flex flex-col gap-4">
-          {messageGroups.map((message) => (
+          {messageGroups.map((messageGroup) => (
             <SpeechBubbleRow
-              key={message.id}
-              message={message}
-              fromMe={message.author === username}
+              key={messageGroup.id}
+              message={messageGroup}
+              fromMe={messageGroup.author === username}
+              onReply={(message) => {
+                setRepliedMessage(message);
+              }}
             />
           ))}
           <span ref={dummyRef}></span>
         </div>
       </section>
 
-      <footer className="p-4 pt-2">
+      <footer className="flex flex-col gap-2 p-4 pt-2">
+        {repliedMessage && (
+          <div className="container relative mx-auto rounded-xl border-8 border-slate-300 bg-slate-200 px-2 py-1">
+            <button
+              className="absolute right-0 top-0 px-2"
+              onClick={() => setRepliedMessage(undefined)}
+            >
+              &times;
+            </button>
+            <p className="text-xs font-semibold">{repliedMessage.author}</p>
+            <p className="text-sm">{repliedMessage.text}</p>
+          </div>
+        )}
         <InputForm onSubmit={handleSubmit} ref={inputRef} />
       </footer>
 
