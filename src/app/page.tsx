@@ -9,7 +9,8 @@ import { useEffect } from "react";
 import useHomeViewModel from "@/viewmodels/useHomeViewModel";
 
 export default function Home() {
-  const { username, setUsername, isUsernameLoading, rooms } = useHomeViewModel();
+  const { username, setUsername, isUsernameLoading, rooms } =
+    useHomeViewModel();
 
   useEffect(() => {
     if (isUsernameLoading) return;

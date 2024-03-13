@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import ContextMenuProvider from "@/contexts/ContextMenuContext";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import strings from "@/values/strings";
@@ -18,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={strings.lang}>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ContextMenuProvider>{children}</ContextMenuProvider>
+      </body>
     </html>
   );
 }

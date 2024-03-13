@@ -6,7 +6,6 @@ interface Props {
   message: Message;
   fromMe?: boolean;
   first?: boolean;
-  [key: string]: any;
 }
 
 export default function SpeechBubble({

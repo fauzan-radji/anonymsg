@@ -1,4 +1,5 @@
 export { default as Avatar } from "./Avatar";
+export { default as ContextMenu } from "./ContextMenu";
 export { default as InputForm } from "./InputForm";
 export { default as Room } from "./Room";
 export { default as Signup } from "./Signup";

@@ -1,17 +1,18 @@
 import { type FunctionComponent, useCallback, useState } from "react";
 
-const swipeThreshold = 50;
-
 interface SwipeableProps {
   direction: "left" | "right";
   onSwipe: () => void;
 }
 
-export default function swipeable<T>(WrappedComponent: FunctionComponent<T>) {
+export default function swipeable<T>(
+  WrappedComponent: FunctionComponent<T>,
+  swipeThreshold: number = 50,
+) {
   return function Swipeable({
     onSwipe,
     direction,
-    ...rest
+    ...props
   }: T & SwipeableProps) {
     const [isTouching, setIsTouching] = useState(false);
     const [xStart, setXStart] = useState(0);
@@ -53,7 +54,7 @@ export default function swipeable<T>(WrappedComponent: FunctionComponent<T>) {
 
     return (
       <WrappedComponent
-        {...(rest as T)}
+        {...(props as T)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMove}
