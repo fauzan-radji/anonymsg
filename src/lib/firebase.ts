@@ -1,7 +1,7 @@
 import {
   type DocumentData,
   addDoc,
-  limit,
+  limitToLast,
   orderBy,
   query,
   updateDoc,
@@ -18,7 +18,7 @@ export function getMessagesQuery(
   return query<Message, DocumentData>(
     messagesRef(roomId),
     orderBy("createdAt"),
-    limit(options.limit),
+    limitToLast(options.limit),
   );
 }
 
@@ -26,7 +26,7 @@ export function getRoomsQuery(options: { limit: number }) {
   return query<Room, DocumentData>(
     roomsRef,
     orderBy("updatedAt"),
-    limit(options.limit),
+    limitToLast(options.limit),
   );
 }
 
